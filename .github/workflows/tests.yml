@@ -1,0 +1,58 @@
+name: LoanFlow Tests
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  lint:
+    name: Lint & Dry-Run
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Install ruff
+        run: pip install ruff
+
+      - name: Python lint (ruff)
+        run: ruff check .
+
+      - name: Python format check (ruff)
+        run: ruff format --check .
+
+      - name: Dry-run (syntax and import check)
+        run: python3 -m robot --dryrun tests/api/
+
+  test:
+    name: Run API Tests
+    needs: lint
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run API tests
+        run: python3 -m robot --outputdir results tests/api/
+
+      - name: Upload test reports
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: robot-reports
+          path: results/
