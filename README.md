@@ -17,7 +17,7 @@ Provide a reliable, maintainable, and scalable test suite that:
 
 ## Prerequisites
 
-- Python 3.12+
+- Python 3.14+
 - pip
 
 ## Setup
