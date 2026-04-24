@@ -53,7 +53,7 @@ In CI, `pull_request` and `push` runs execute linting plus Robot dry-run checks,
 ## Project Structure
 
 ```
-loanflow-robot-tests/
+robot-test-framework/
 │
 ├── tests/                                    # Test suites (one folder per test type)
 │   └── api/
@@ -97,10 +97,14 @@ loanflow-robot-tests/
 │   ├── mock_request_handler.py               # HTTP handler for risk engine (port 9090)
 │   └── wiremock_manager.py                   # Risk Engine lifecycle (custom threaded HTTP server)
 │
+├── .github/workflows/tests.yml               # CI workflow for linting, dry-run, and API execution
 ├── robot.toml                                # RobotCode IDE config (python-path = ["."])
+├── README.md                                 # Project overview, setup, and architecture notes
 ├── requirements.txt                          # Python dependencies
 └── .gitignore
 ```
+
+Low-signal files such as `__init__.py` and generated artifacts like `__pycache__/`, `results/`, `log.html`, `report.html`, and `output.xml` are intentionally omitted from the tree above.
 
 ### Layer Responsibilities
 
